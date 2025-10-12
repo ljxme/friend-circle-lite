@@ -60,5 +60,7 @@ smtp:
 #   name:               友链名称
 #   url:                指定的RSS地址
 specific_RSS:
+   - name: "Chancel's blog"
+     url: "https://www.chancel.me/api/rss.xml"
   # - name: "無名小栈"
   #   url: "https://blog.imsyy.top/rss.xml"
