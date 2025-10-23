@@ -84,7 +84,7 @@ def check_feed(friend, session):
     Atom 优先，如果都不能访问，则返回 ['none', 源地址]。
 
     参数：
-    friend (dict): 包含朋友信息的字典。
+    friend (dict|str): 包含朋友信息的字典，或博客主页 URL 字符串。
     session (requests.Session): 用于请求的会话对象。
 
     返回：
@@ -93,8 +93,15 @@ def check_feed(friend, session):
             如果 feed 链接可访问，则返回 ['feed', feed_url]；
             如果都不可访问，则返回 ['none', blog_url]。
     """
-    blog_url = friend.get("link", "")
-    rsslink = friend.get("rss", "")
+    # 兼容传入字符串 URL 的情况
+    if isinstance(friend, str):
+        blog_url = friend.strip()
+        rsslink = ""
+        friend_for_log = {"link": blog_url}
+    else:
+        blog_url = friend.get("link", "")
+        rsslink = friend.get("rss", "")
+        friend_for_log = friend
     
     possible_feeds = [
         ('atom', '/atom.xml'),
@@ -115,8 +122,8 @@ def check_feed(friend, session):
                 return [feed_url.split('/')[-1].split('.')[0], feed_url]
         except requests.RequestException:
             continue
-    logging.warning(f"无法找到订阅链接：{friend}")
-    return ['none', friend.get("link", "")]
+    logging.warning(f"无法找到订阅链接：{friend_for_log}")
+    return ['none', blog_url]
 
 def parse_feed(url, session, count=5, blog_url=''):
     """
