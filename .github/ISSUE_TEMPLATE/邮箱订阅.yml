@@ -1,6 +1,6 @@
 name: "📧 邮箱订阅"
 description: 请在标题后直接输入您的邮箱，不要带空格及其他符号
-labels: []
+labels: [subscribe]
 body:
   - type: markdown
     attributes:
